@@ -1,0 +1,68 @@
+/* counter-section css start */
+.counter-wrap {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 39px;
+}
+
+.counter-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 45px 10px;
+    border: 2px solid var(--border-color);
+    box-shadow: var(--shadow1);
+}
+
+.counter-card .counter-number {
+    font-family: var(--font-primary);
+    line-height: 113%;
+    font-weight: 400;
+}
+
+.counter-card .counter-title {
+    text-transform: capitalize;
+    font-family: var(--font-secondary);
+    line-height: 100%;
+    font-weight: 700;
+}
+
+/* counter-section css end */
+
+@media only screen and (max-width: 1080px) {
+
+    /* counter-section css start */
+    .counter-wrap {
+        gap: 15px;
+    }
+
+    /* counter-section css end */
+
+}
+
+
+@media only screen and (max-width: 860px) {
+
+    /* counter-section css start */
+    .counter-wrap {
+        grid-template-columns: repeat(6, 1fr);
+        row-gap: 8px;
+    }
+
+    .counter-card {
+        grid-column: span 2;
+        padding: 15px 10px;
+    }
+
+    .counter-card:nth-child(4) {
+        grid-column: span 3;
+    }
+
+    .counter-card:nth-child(5) {
+        grid-column: span 3;
+    }
+
+    /* counter-section css end */
+
+}

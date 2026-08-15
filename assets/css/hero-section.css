@@ -1,0 +1,84 @@
+/* hero-section css start */
+.hero-section {
+    background-image: url("../images/hero-bg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    max-width: 100%;
+    margin: 24px;
+    border: 2px solid var(--border-color);
+}
+
+.hero-wrapper {
+    padding-left: clamp(16px, 7.9914vw - 16.1253px, 90px);
+    padding-right: clamp(16px, 7.9914vw - 16.1253px, 90px);
+    padding-top: clamp(51px, 3.3477vw + 37.5421px, 82px);
+    padding-bottom: clamp(67px, 1.6199vw + 60.4881px, 82px);
+    background: #16415F40;
+    background-blend-mode: multiply;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #16415F 100%);
+}
+
+.hero-content {
+    max-width: 760px;
+    color: var(--off-white);
+}
+
+.hero-content .subtitle {
+    font-family: var(--font-secondary);
+    color: var(--off-white);
+    font-weight: 700;
+    line-height: 100%;
+    margin-bottom: 16px;
+}
+
+.hero-content .title {
+    font-family: var(--font-primary);
+    color: var(--off-white);
+    font-weight: 700;
+    line-height: 100%;
+    text-transform: uppercase;
+}
+
+.hero-content .text {
+    font-family: var(--font-tertiary);
+    color: var(--off-white);
+    font-weight: 400;
+    line-height: 120%;
+    margin-top: 16px;
+}
+
+.hero-btns {
+    margin-top: 64px;
+    display: flex;
+    gap: 24px;
+}
+
+/* hero-section css end */
+
+@media only screen and (max-width: 1328px) {
+
+    /* hero-section css start */
+    .hero-section {
+        margin: 24px;
+    }
+
+    /* hero-section css end */
+
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* hero-section css start */
+    .hero-section {
+        margin: 8px 24px;
+    }
+
+    .hero-btns {
+        margin-top: 48px;
+        gap: 8px;
+    }
+
+    /* hero-section css end */
+
+}
