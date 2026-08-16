@@ -1,0 +1,103 @@
+/* service-section css start */
+.service-section {
+    margin: 48px 24px;
+    background: url("../images/service-bg.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 80px;
+    border: 3px solid var(--border-color);
+}
+
+.service-wrapper {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.service-title {
+    text-transform: uppercase;
+    color: var(--off-white);
+    font-family: var(--font-primary);
+    line-height: 100%;
+    max-width: 509px;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.service-items {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    width: 100%;
+    gap: 16px;
+}
+
+.service-item {
+    border: 2px solid var(--border-color);
+    padding: 16px 40px;
+    width: 100%;
+}
+
+.service-item .title {
+    text-transform: uppercase;
+    font-family: var(--font-secondary);
+    line-height: 120%;
+    font-weight: 700;
+}
+
+.service-item .text {
+    font-family: var(--font-tertiary);
+    line-height: 122%;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* service-section css end */
+@media only screen and (max-width:992px) {
+
+    /* service-section css start */
+    .service-section {
+        padding: 64px 24px;
+    }
+
+    /* service-section css end */
+}
+
+@media only screen and (max-width:767px) {
+
+    /* service-section css start */
+    .service-wrapper {
+        flex-direction: column;
+    }
+
+    .service-title {
+        max-width: 100%;
+    }
+
+    .service-items {
+        max-width: 100%;
+    }
+
+    /* service-section css end */
+}
+
+@media only screen and (max-width:575px) {
+
+    /* service-section css start */
+    .service-section {
+        margin: 8px 24px;
+        padding: 64px 14px;
+        background: url("../images/service-bg-mobile.jpg");
+    }
+
+    .service-title {
+        margin-bottom: 32px;
+    }
+
+    .service-item {
+        padding: 8px 16px;
+    }
+
+    /* service-section css end */
+}

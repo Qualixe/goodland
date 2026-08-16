@@ -1,0 +1,164 @@
+/* ways-section css start */
+.ways-section {
+    margin: 48px 24px;
+}
+
+.ways-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.ways-top {
+    display: flex;
+    gap: 24px;
+}
+
+.ways-intro {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 2px solid var(--border-color);
+    padding: 75px 62px 71px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.ways-intro .subtitle {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 122%;
+}
+
+.ways-intro .title {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 105%;
+}
+
+.ways-intro .text {
+    font-family: var(--font-secondary);
+    margin-top: 48px;
+    font-weight: 700;
+    font-size: clamp(14px, 0.432vw + 14.2635px, 20px);
+    max-width: 285px;
+    line-height: 120%;
+}
+
+.ways-media {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+}
+
+.ways-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.ways-card {
+    border: 2px solid var(--border-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ways-card .title {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.ways-card .text {
+    font-family: var(--font-tertiary);
+}
+
+.ways-card-footer {
+    margin-top: auto;
+    padding-top: 12px;
+    border-top: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--font-tertiary);
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.ways-link {
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--heading-text-color);
+}
+
+.ways-link svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ways-section css end */
+
+@media only screen and (max-width: 992px) {
+
+    /* ways-section css start */
+    .ways-top {
+        flex-direction: column;
+    }
+
+    .ways-media {
+        min-height: 280px;
+    }
+
+    .ways-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* ways-section css end */
+
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* ways-section css start */
+    .ways-section {
+        margin: 8px 24px;
+    }
+
+    .ways-wrapper {
+        gap: 8px;
+    }
+
+    .ways-intro {
+        padding: 24px;
+    }
+
+    .ways-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .ways-card {
+        padding: 16px;
+    }
+
+    /* ways-section css end */
+
+}

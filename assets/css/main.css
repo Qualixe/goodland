@@ -218,7 +218,7 @@ span {
 }
 
 .section {
-    padding: 42px 0;
+    margin: 48px 24px;
 }
 
 img {
@@ -276,7 +276,7 @@ button {
 }
 
 .btn {
-    padding: 16px 48px;
+    padding: clamp(8px, 1.002vw + 1.89px, 19px) clamp(16px, 3.009vw + 2.04px, 48px);
     color: var(--btn-color);
     background: var(--btn-bg);
     font-size: clamp(14px, 1.5119vw + 7.9222px, 28px);
@@ -945,11 +945,10 @@ button {
     }
 
     .section {
-        padding: 24px 0;
+        margin: 8px 24px;
     }
 
     .btn {
-        padding: 8px 16px;
         box-shadow: 2px 2px 0px 0px #022D5A;
         line-height: 17px;
     }
