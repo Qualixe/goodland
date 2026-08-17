@@ -18,7 +18,7 @@
     flex: 1 1 0;
     min-width: 0;
     border: 2px solid var(--border-color);
-    padding: 75px 62px 71px 64px;
+    padding: clamp(32px, 4.644vw + 13.33px, 75px) clamp(16px, 4.968vw - 3.98px, 62px) clamp(32px, 4.212vw + 15.07px, 71px) clamp(16px, 5.184vw - 4.83px, 64px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -63,72 +63,171 @@
 
 .ways-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
 }
 
 .ways-card {
     border: 2px solid var(--border-color);
-    padding: 24px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: var(--shadow1);
+    aspect-ratio: 400/560;
 }
 
 .ways-card .title {
-    font-family: var(--font-secondary);
-    font-weight: 700;
+    font-family: var(--font-primary);
+    font-weight: 400;
     text-transform: uppercase;
-    line-height: 1.2;
+    line-height: 113%;
 }
 
 .ways-card .text {
-    font-family: var(--font-tertiary);
+    margin-top: 8px;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    line-height: 120%;
+    font-size: clamp(14px, 0.432vw + 14.2635px, 20px);
 }
 
 .ways-card-footer {
-    margin-top: auto;
-    padding-top: 12px;
-    border-top: 2px solid var(--border-color);
+    margin-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.ways-list {
+    padding-top: 8px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    font-family: var(--font-tertiary);
+    gap: 8px;
+}
+
+.ways-list li {
+    text-align: right;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
     font-weight: 700;
-    font-size: 13px;
+    font-family: var(--font-secondary);
+    line-height: 122%;
 }
 
 .ways-link {
+    margin-top: 24px;
     align-self: flex-end;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 24px;
     font-family: var(--font-secondary);
     font-weight: 700;
     text-transform: uppercase;
     color: var(--heading-text-color);
+    line-height: 113%;
 }
 
-.ways-link svg {
-    width: 24px;
-    height: 24px;
+.ways-link .icon {
+    width: 72px;
+    height: 48px;
+    background: var(--item-bg2);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 3px 3px 0px 0px var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ways-link .icon svg {
+    transition:
+        transform 0.45s cubic-bezier(.22, 1, .36, 1);
+}
+
+.ways-link:hover .icon svg {
+    animation: arrowMove 0.7s cubic-bezier(.22, 1, .36, 1);
+}
+
+@keyframes arrowMove {
+    0% {
+        transform: translateX(0);
+    }
+
+    40% {
+        transform: translateX(10px);
+    }
+
+    55% {
+        transform: translateX(-3px);
+    }
+
+    100% {
+        transform: translateX(6px);
+    }
 }
 
 /* ways-section css end */
 
-@media only screen and (max-width: 992px) {
+@media only screen and (max-width: 1266px) {
+
+    /* ways-section css start */
+    .ways-intro {
+        padding: 32px 16px;
+    }
+
+    /* ways-section css end */
+
+}
+
+@media only screen and (max-width: 1080px) {
 
     /* ways-section css start */
     .ways-top {
         flex-direction: column;
     }
 
+    .ways-intro {
+        aspect-ratio: 357/384;
+    }
+
+    .ways-media {
+        flex: 1;
+    }
+
+    .ways-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* ways-section css end */
+
+}
+
+@media only screen and (max-width: 992px) {
+
+    /* ways-section css start */
     .ways-media {
         min-height: 280px;
     }
 
-    .ways-grid {
-        grid-template-columns: repeat(2, 1fr);
+    /* ways-section css end */
+
+}
+
+@media only screen and (max-width: 767px) {
+
+    /* ways-section css start */
+    .ways-card {
+        padding: 30px 14px;
+    }
+
+    .ways-intro .subtitle {
+        font-size: 20px;
+    }
+
+    .ways-intro .text {
+        margin-top: 10px;
+        font-size: 14px;
     }
 
     /* ways-section css end */
@@ -142,21 +241,63 @@
         margin: 8px 24px;
     }
 
-    .ways-wrapper {
+    .ways-top,
+    .ways-wrapper,
+    .ways-grid {
         gap: 8px;
-    }
-
-    .ways-intro {
-        padding: 24px;
     }
 
     .ways-grid {
-        grid-template-columns: 1fr;
-        gap: 8px;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     .ways-card {
-        padding: 16px;
+        width: calc(50% - 4.5px);
+    }
+
+    .ways-list {
+        padding-top: 4px;
+        gap: 4px;
+    }
+
+    .ways-list li {
+        padding-bottom: 4px;
+    }
+
+    .ways-link {
+        margin-top: 8px;
+        gap: 8px;
+        font-size: 24px;
+    }
+
+    .ways-link .icon {
+        width: 36px;
+        height: 24px;
+        box-shadow: 1px 1px 0px 0px var(--border-color);
+    }
+
+    .ways-link .icon svg {
+        width: 11.67px;
+        height: 11.67px;
+    }
+
+    @keyframes arrowMove {
+        0% {
+            transform: translateX(0);
+        }
+
+        40% {
+            transform: translateX(6px);
+        }
+
+        55% {
+            transform: translateX(-2px);
+        }
+
+        100% {
+            transform: translateX(4px);
+        }
     }
 
     /* ways-section css end */

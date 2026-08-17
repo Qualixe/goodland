@@ -1,0 +1,257 @@
+/* membership-section css start */
+.membership-section {
+    margin: 48px 24px;
+}
+
+.membership-wrap {
+    position: relative;
+    aspect-ratio: 929 / 959;
+    border: 2px solid var(--border-color);
+    background: var(--item-bg2);
+    overflow: hidden;
+}
+
+.membership-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: clamp(220px, 38vw, 520px);
+}
+
+.membership-center .subtitle {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 100%;
+    margin-bottom: 16px;
+}
+
+.membership-center .title {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 100%;
+}
+
+.membership-center .price {
+    margin-top: 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.membership-center .price .text {
+    line-height: 100%;
+    font-family: var(--font-secondary);
+    font-weight: 700;
+}
+
+.membership-center .btn {
+    margin-top: 64px;
+    border-color: var(--off-white);
+    background: var(--border-color);
+    color: var(--off-white);
+    font-size: clamp(20px, 2.3758vw + 10.4492px, 42px);
+    line-height: 123%;
+    padding-left: 48px;
+    padding-right: 48px;
+}
+
+.membership-center .btn:hover {
+    background: var(--white);
+    color: var(--heading-text-color);
+}
+
+.membership-badge {
+    position: absolute;
+    width: 15.7%;
+    aspect-ratio: 1 / 1;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 1;
+    transition: transform 0.6s cubic-bezier(.22, 1, .36, 1), opacity 0.5s ease;
+    transition-delay: var(--pop-delay, 0s);
+}
+
+.membership-section.in-view .membership-badge {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.membership-parallax {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: translate(var(--px, 0px), var(--py, 0px));
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+}
+
+.membership-float {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    animation: membershipFloat 5s ease-in-out infinite;
+    animation-delay: var(--float-delay, 0s);
+}
+
+.membership-badge.is-photo .membership-float {
+    overflow: hidden;
+    border: 3px solid var(--border-color);
+}
+
+.membership-badge.is-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.membership-badge.is-icon .membership-float {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 3px solid var(--border-color);
+    padding: 8%;
+    text-align: center;
+}
+
+.membership-badge.is-icon svg {
+    width: 49%;
+    height: 49%;
+}
+
+.membership-badge.is-icon .text {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    line-height: 1.15;
+    font-size: clamp(8px, 1.296vw + 2.79px, 20px);
+}
+
+@keyframes membershipFloat {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .membership-float,
+    .membership-badge,
+    .membership-parallax {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    .membership-badge {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+
+    .membership-parallax {
+        transform: none !important;
+    }
+}
+
+/* membership-section css end */
+
+@media only screen and (max-width: 992px) {
+
+    /* membership-section css start */
+    .membership-center .subtitle {
+        font-size: 24px;
+    }
+
+    .membership-center .title {
+        font-size: 56px;
+    }
+
+    .membership-center .price {
+        margin-top: 24px;
+    }
+
+    .membership-center .btn {
+        margin-top: 24px;
+    }
+
+    /* membership-section css end */
+}
+
+@media only screen and (max-width: 767px) {
+
+    /* membership-section css start */
+    .membership-center {
+        width: clamp(200px, 68vw, 290px);
+        gap: 6px;
+    }
+
+    .membership-wrap {
+        aspect-ratio: 929 / 1180;
+    }
+
+    .membership-badge {
+        width: 19%;
+    }
+
+    .membership-badge.is-icon .text {
+        font-size: 8px;
+    }
+
+    .membership-badge.is-photo .membership-float {
+        border: 1px solid var(--border-color);
+    }
+
+    .membership-badge.is-icon .membership-float {
+        border: 1px solid var(--border-color);
+    }
+
+    /* membership-section css end */
+
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* membership-section css start */
+    .membership-section {
+        margin: 16px 24px 8px;
+    }
+
+    .membership-wrap {
+        aspect-ratio: 354 / 680;
+    }
+
+    .membership-badge {
+        width: 72px !important;
+    }
+
+    .membership-center .btn {
+        line-height: 120%;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .membership-badge.is-icon svg {
+        width: 41%;
+        height: 41%;
+    }
+
+    .membership-badge.is-icon .membership-float {
+        gap: 4px;
+        padding: 12%;
+    }
+    /* membership-section css end */
+
+}

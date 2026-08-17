@@ -14,9 +14,6 @@
     padding-right: clamp(16px, 7.9914vw - 16.1253px, 90px);
     padding-top: clamp(51px, 3.3477vw + 37.5421px, 82px);
     padding-bottom: clamp(67px, 1.6199vw + 60.4881px, 82px);
-    background: #16415F40;
-    background-blend-mode: multiply;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #16415F 100%);
 }
 
 .hero-content {
@@ -35,7 +32,7 @@
 .hero-content .title {
     font-family: var(--font-primary);
     color: var(--off-white);
-    font-weight: 700;
+    font-weight: 400;
     line-height: 100%;
     text-transform: uppercase;
 }

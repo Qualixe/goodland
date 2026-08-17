@@ -152,7 +152,7 @@ var swiper = new Swiper(".cart-drawer-slider", {
 
 // cart-drawer progesss-bar js start--
 const progress = document.querySelector(".progress");
-progress.addEventListener("input", function () {
+progress?.addEventListener("input", function () {
   const value = this.value;
   this.style.background = `linear-gradient(to right, #d55a3c 0%, #422c26 ${value}%,rgb(236 219 216) ${value}%)`;
 });
@@ -736,3 +736,186 @@ document.addEventListener("DOMContentLoaded", () => {
   breakpoint.addEventListener("change", setupAccordion);
 });
 // Footer dropdown responsive accordion js end --
+
+
+// membership-section js start--
+(() => {
+  const section = document.querySelector(".membership-section");
+  const wrap = section?.querySelector(".membership-wrap");
+  if (!section || !wrap) return;
+
+  const badges = [...section.querySelectorAll(".membership-badge")];
+  const parallaxEls = badges.map((badge) => badge.querySelector(".membership-parallax"));
+
+  // Each badge drifts a different amount so the cursor effect feels layered
+  // instead of every circle moving in lockstep.
+  const depths = badges.map((_, i) => 10 + ((i * 37) % 22));
+
+  badges.forEach((badge, i) => {
+    badge.style.setProperty("--pop-delay", `${i * 0.06}s`);
+    badge.style.setProperty("--float-delay", `${(i % 6) * 0.35}s`);
+  });
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    section.classList.add("in-view");
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        section.classList.add("in-view");
+        observer.unobserve(section);
+      });
+    },
+    { threshold: 0.25 },
+  );
+
+  observer.observe(section);
+
+  // Cursor-follow parallax: badges drift toward the cursor, each at its own
+  // depth, and ease back to rest when the cursor leaves.
+  const canHover = window.matchMedia("(pointer: fine)").matches;
+  if (!canHover) return;
+
+  let targetX = 0;
+  let targetY = 0;
+  let rafId = null;
+
+  const applyParallax = () => {
+    rafId = null;
+    parallaxEls.forEach((el, i) => {
+      if (!el) return;
+      const depth = depths[i];
+      el.style.setProperty("--px", `${targetX * depth}px`);
+      el.style.setProperty("--py", `${targetY * depth}px`);
+    });
+  };
+
+  const queueParallax = () => {
+    if (rafId !== null) return;
+    rafId = requestAnimationFrame(applyParallax);
+  };
+
+  wrap.addEventListener("mousemove", (e) => {
+    const rect = wrap.getBoundingClientRect();
+    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    queueParallax();
+  });
+
+  wrap.addEventListener("mouseleave", () => {
+    targetX = 0;
+    targetY = 0;
+    queueParallax();
+  });
+})();
+// membership-section js end--
+
+
+// scroll-reveal js start--
+(() => {
+  const groups = document.querySelectorAll(".reveal-group");
+  if (!groups.length) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    groups.forEach((group) => group.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
+  );
+
+  groups.forEach((group) => observer.observe(group));
+})();
+// scroll-reveal js end--
+
+// smooth-scroll js start--
+(() => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const canHover = window.matchMedia("(pointer: fine)").matches;
+  if (reduceMotion || !canHover) return;
+
+  const ease = 0.1;
+  const LINE_HEIGHT = 34; // px per "line" when a device reports DOM_DELTA_LINE
+  let current = window.scrollY;
+  let target = window.scrollY;
+  let rafId = null;
+
+  const maxScroll = () =>
+    document.documentElement.scrollHeight - window.innerHeight;
+
+  // scroll-behavior:smooth (set on html/body for anchor jumps) intercepts
+  // plain scrollTo(x, y) calls and animates them natively — which stacks
+  // with our own easing below and makes the page fall further and further
+  // behind the cursor. behavior:"auto" forces an instant, exact jump each
+  // frame so our lerp is the only easing in effect.
+  const jumpTo = (y) => window.scrollTo({ top: y, left: 0, behavior: "instant" });
+
+  const normalizeDelta = (e) => {
+    if (e.deltaMode === 1) return e.deltaY * LINE_HEIGHT; // DOM_DELTA_LINE
+    if (e.deltaMode === 2) return e.deltaY * window.innerHeight; // DOM_DELTA_PAGE
+    return e.deltaY; // DOM_DELTA_PIXEL
+  };
+
+  const tick = () => {
+    current += (target - current) * ease;
+
+    if (Math.abs(target - current) < 0.5) {
+      current = target;
+      jumpTo(current);
+      rafId = null;
+      return;
+    }
+
+    jumpTo(current);
+    rafId = requestAnimationFrame(tick);
+  };
+
+  const start = () => {
+    if (rafId === null) rafId = requestAnimationFrame(tick);
+  };
+
+  window.addEventListener(
+    "wheel",
+    (e) => {
+      if (document.body.classList.contains("active")) return;
+      if (e.ctrlKey) return; // let pinch-zoom through untouched
+
+      e.preventDefault();
+      target += normalizeDelta(e);
+      target = Math.max(0, Math.min(target, maxScroll()));
+      start();
+    },
+    { passive: false },
+  );
+
+  // Keep the eased scroll in sync with keyboard/scrollbar/anchor jumps
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (rafId !== null) return;
+      current = window.scrollY;
+      target = window.scrollY;
+    },
+    { passive: true },
+  );
+
+  window.addEventListener("resize", () => {
+    target = Math.min(target, maxScroll());
+  });
+})();
+// smooth-scroll js end--

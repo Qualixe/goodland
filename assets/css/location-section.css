@@ -33,6 +33,14 @@
     text-transform: uppercase;
 }
 
+.location-item1 {
+    background: url("../images/location-item-bg1.jpg");
+}
+
+.location-item2{
+    background: url("../images/location-item-bg2.jpg");
+}
+
 .location-item {
     padding: 40px 24px;
     background-position: center;
@@ -42,14 +50,7 @@
     display: flex;
     justify-content: space-between;
     gap: 16px;
-}
-
-.location-item1 {
-    background: url("../images/location-item-bg1.jpg");
-}
-
-.location-item2{
-    background: url("../images/location-item-bg2.jpg");
+    aspect-ratio: 1280/720;
 }
 
 .location-item-content {

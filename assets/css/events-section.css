@@ -1,0 +1,261 @@
+/* events-section css start */
+.events-section {
+    margin: 48px 24px;
+}
+
+.events-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.events-top {
+    display: flex;
+    gap: 24px;
+}
+
+.events-intro {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 2px solid var(--border-color);
+    padding: clamp(32px, 3.78vw + 16.81px, 67px) clamp(16px, 4.97vw - 3.98px, 62px) clamp(32px, 3.78vw + 16.81px, 67px) clamp(16px, 5.18vw - 4.83px, 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.events-intro .subtitle {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 122%;
+}
+
+.events-intro .title {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 105%;
+}
+
+.events-intro .text {
+    font-family: var(--font-secondary);
+    margin-top: 48px;
+    font-weight: 700;
+    font-size: clamp(14px, 0.432vw + 14.2635px, 20px);
+    max-width: 480px;
+    line-height: 120%;
+}
+
+.events-media {
+    flex: 1 1 0;
+    min-width: 0;
+    border: 2px solid var(--border-color);
+    overflow: hidden;
+}
+
+.events-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 38px;
+}
+
+.events-card-item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.events-card {
+    border: 2px solid var(--border-color);
+    padding: 40px 38px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    box-shadow: var(--shadow1);
+    flex: 1;
+}
+
+.events-card .title {
+    font-family: var(--font-primary);
+    font-weight: 400;
+    text-transform: uppercase;
+    line-height: 113%;
+    font-size: clamp(48px, 5.184vw + 27.15px, 96px);
+    max-width: 320px;
+}
+
+.events-card-footer {
+    margin-top: 24px;
+    border-top: 1px solid var(--border-color);
+}
+
+.events-list-title {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 700;
+    font-family: var(--font-secondary);
+    line-height: 122%;
+}
+
+.events-lists {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.events-lists li {
+    padding-left: 38px;
+    position: relative;
+    font-family: var(--font-tertiary);
+    font-weight: 400;
+    line-height: 122%;
+}
+
+.events-lists li::before {
+    position: absolute;
+    content: "";
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 22px;
+    height: 22px;
+    background: url("../images/circle-check.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.event-card-btn .btn {
+    width: 100%;
+    font-size: clamp(20px, 2.3758vw + 10.4492px, 42px);
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+/* events-section css end */
+
+@media only screen and (max-width: 1266px) {
+
+    /* events-section css start */
+    .events-intro {
+        padding: 32px 16px;
+    }
+
+    .events-grid {
+        gap: 24px;
+    }
+
+    /* events-section css end */
+
+}
+
+@media only screen and (max-width: 1080px) {
+
+    /* events-section css start */
+    .events-top {
+        flex-direction: column;
+    }
+
+    .events-intro {
+        aspect-ratio: 357/475;
+        order: 1;
+    }
+
+    .events-media {
+        flex: 1;
+        order: 2;
+    }
+
+    .events-grid {
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+
+    /* events-section css end */
+
+}
+
+@media only screen and (max-width: 992px) {
+
+    /* events-section css start */
+    .events-media {
+        min-height: 280px;
+    }
+
+    /* events-section css end */
+
+}
+
+@media only screen and (max-width: 767px) {
+
+    /* events-section css start */
+    .events-card {
+        padding: 32px 24px;
+    }
+
+    .events-intro .subtitle {
+        font-size: 20px;
+    }
+
+    .events-intro .text {
+        margin-top: 10px;
+        font-size: 14px;
+    }
+
+    .events-list-title {
+        padding: 4px 0;
+        font-size: 20px !important;
+    }
+
+    /* events-section css end */
+
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* events-section css start */
+    .events-section {
+        margin: 8px 24px;
+    }
+
+    .events-card-item,
+    .events-top,
+    .events-wrapper,
+    .events-grid {
+        gap: 8px;
+    }
+
+    .events-lists {
+        gap: 8px;
+    }
+
+    .events-lists li {
+        padding-left: 24px;
+    }
+
+    .events-lists li::before {
+        width: 16px;
+        height: 16px;
+    }
+
+    .event-card-btn .btn {
+        font-size: 24px;
+        padding: 14px 10px;
+    }
+
+    /* events-section css end */
+
+}
