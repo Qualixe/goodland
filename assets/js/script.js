@@ -254,3 +254,144 @@ var swiper = new Swiper(".testimonial-slider", {
   },
 });
 // image-category-slider js end--
+
+
+// hero-parallax js start--
+(() => {
+  const hero = document.querySelector(".hero-section");
+  if (!hero) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  let ticking = false;
+
+  const update = () => {
+    ticking = false;
+    const rect = hero.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+
+    const progress = Math.max(-1, Math.min(1, -rect.top / (rect.height || 1)));
+    const maxShift = Math.min(rect.height * 0.08, 80);
+    const shift = progress * maxShift;
+    hero.style.backgroundPosition = `center calc(50% + ${shift}px)`;
+  };
+
+  const queue = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(update);
+  };
+
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
+  update();
+})();
+// hero-parallax js end--
+
+// text-reveal js start--
+(() => {
+  const targets = document.querySelectorAll(".text-reveal");
+  if (!targets.length) return;
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion) return;
+
+  // Wraps each non-space character in its own span (the gradient-clip color
+  // wipe lives on it directly — see main.css), with each word's characters
+  // grouped under a nowrap wrapper so the browser still only wraps lines
+  // between words, not in the middle of one. Whitespace stays as plain text.
+  // Only touches elements whose only children are text nodes and <br> —
+  // anything more complex is left untouched.
+  const splitIntoChars = (el) => {
+    const nodes = [...el.childNodes];
+    const isSimple = nodes.every(
+      (n) =>
+        n.nodeType === Node.TEXT_NODE ||
+        (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
+    );
+    if (!isSimple) return [];
+
+    const frag = document.createDocumentFragment();
+    const chars = [];
+
+    nodes.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+        frag.appendChild(document.createElement("br"));
+        return;
+      }
+
+      node.textContent.split(/(\s+)/).forEach((chunk) => {
+        if (!chunk) return;
+        if (!chunk.trim()) {
+          frag.appendChild(document.createTextNode(chunk));
+          return;
+        }
+
+        const wordGroup = document.createElement("span");
+        wordGroup.className = "word-group";
+
+        Array.from(chunk).forEach((ch) => {
+          const span = document.createElement("span");
+          span.className = "char";
+          span.textContent = ch;
+          wordGroup.appendChild(span);
+          chars.push(span);
+        });
+
+        frag.appendChild(wordGroup);
+      });
+    });
+
+    el.innerHTML = "";
+    el.appendChild(frag);
+    return chars;
+  };
+
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+
+  const items = [...targets]
+    .map((el) => ({ el, chars: splitIntoChars(el) }))
+    .filter((item) => item.chars.length);
+
+  if (!items.length) return;
+
+  // Each heading's fill progress is 0 while its top sits at 85% of the
+  // viewport height, 1 once it reaches 35% — recalculated every scroll
+  // frame from actual scroll position, not a fixed timer, so the reveal
+  // stays tied to scroll: keep scrolling and more letters light up, scroll
+  // back up and they drain back out. Letters are staggered within that
+  // window so they still cascade rather than lighting up together.
+  const updateItem = ({ el, chars }) => {
+    const rect = el.getBoundingClientRect();
+    const startY = window.innerHeight * 0.85;
+    const endY = window.innerHeight * 0.35;
+    const progress = clamp01((startY - rect.top) / (startY - endY));
+
+    const n = chars.length;
+    const spread = 0.8; // portion of the window spent staggering letter starts
+    chars.forEach((char, i) => {
+      const charStart = (i / n) * spread;
+      const charDuration = 1 - spread + spread / n;
+      const local = clamp01((progress - charStart) / charDuration);
+      char.style.setProperty("--wp", `${(100 - local * 100).toFixed(1)}%`);
+    });
+  };
+
+  const updateAll = () => items.forEach(updateItem);
+
+  let ticking = false;
+  const queue = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      updateAll();
+    });
+  };
+
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
+  updateAll();
+})();
+// text-reveal js end--

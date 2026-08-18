@@ -25,6 +25,10 @@
     font-weight: 400;
 }
 
+.service-title.text-reveal .char {
+    --tr-color: var(--off-white);
+}
+
 .service-items {
     display: flex;
     flex-direction: column;

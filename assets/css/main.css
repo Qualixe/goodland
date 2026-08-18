@@ -355,6 +355,42 @@ html.js .reveal-group.is-visible>* {
 
 /* scroll-reveal css end */
 
+/* text-reveal css start */
+/* Scroll-linked, letter-by-letter text color reveal. Each character is its
+   own span with a hard-stop gradient twice its own width; sliding that
+   gradient's background-position-x from 100% (dim half showing) to 0%
+   (full-color half showing) makes the letter "wipe" into color. script.js
+   writes --wp per character every scroll frame — driven continuously by how
+   far the heading has scrolled through the viewport, staggered per letter —
+   so it stays tied to scroll position: scroll further and more letters
+   light up, scroll back up and they drain back out. If JS never runs, --wp
+   falls back to 0% (revealed) so the text just reads normally. */
+.text-reveal .word-group {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.text-reveal .char {
+    display: inline-block;
+    --tr-color: var(--heading-text-color);
+    --tr-dim: rgba(22, 65, 95, .22);
+    background-image: linear-gradient(to right, var(--tr-color) 50%, var(--tr-dim) 50%);
+    background-size: 200% 100%;
+    background-position-x: var(--wp, 0%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    transition: background-position-x .1s linear;
+}
+
+.hero-content .text-reveal .char {
+    --tr-color: var(--off-white);
+    --tr-dim: rgba(238, 236, 222, .32);
+}
+
+/* text-reveal css end */
+
 /* cart-drawer css start */
 .cart-drawer {
     position: fixed;
