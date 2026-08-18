@@ -1,0 +1,112 @@
+/* faq-section css start */
+.faq-section {
+    background: var(--item-bg4);
+    padding: 80px 0;
+    border: 2px solid var(--border-color);
+}
+
+.faq-wrap {
+    max-width: 1048px;
+    padding: 0 44px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+}
+
+.faq-section-heading {
+    text-align: center;
+}
+
+.faq-section-heading .subtitle {
+    text-transform: uppercase;
+    color: var(--off-white);
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    line-height: 100%;
+    margin-bottom: 16px;
+}
+
+.faq-section-heading .title {
+    text-transform: uppercase;
+    color: var(--brand-color);
+    font-family: var(--font-primary);
+    font-weight: 400;
+    line-height: 100%;
+}
+
+.faq-items {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+}
+
+.faq-item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+}
+
+.faq-item .title {
+    color: var(--off-white);
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    line-height: 118%;
+}
+
+.faq-item .text {
+    color: var(--off-white);
+    font-family: var(--font-tertiary);
+    font-weight: 400;
+    line-height: 119%;
+}
+
+.faq-btn {
+    display: flex;
+    justify-content: center;
+}
+
+.faq-btn .primary-btn {
+    background: var(--item-bg3);
+    font-size: clamp(20px, 2.3758vw + 10.4492px, 42px);
+    line-height: 105%
+}
+
+.faq-btn .primary-btn:hover {
+    background: var(--item-bg);
+}
+
+/* faq-section css end */
+
+@media only screen and (max-width: 992px) {
+
+    /* faq-section css start */
+    .faq-btn .primary-btn {
+        font-size: 24px;
+        padding: 18px 48px;
+    }
+    /* faq-section css end */
+}
+
+@media only screen and (max-width:767px) {
+
+    /* faq-section css start */
+    .faq-wrap {
+        gap: 48px;
+    }
+
+    .faq-items {
+        gap: 24px;
+    }
+
+    .faq-item {
+        gap: 4px;
+    }
+
+    .faq-item .title {
+        font-size: 20px;
+    }
+
+    /* faq-section css end */
+}

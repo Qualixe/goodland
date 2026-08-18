@@ -1,0 +1,76 @@
+/* app-section css start */
+.app-section {
+    background: var(--brand-color);
+    padding: clamp(32px, 4.32vw + 14.65px, 72px) clamp(16px, 5.18vw - 4.83px, 64px) clamp(16px, 5.18vw - 4.83px, 64px) clamp(16px, 5.18vw - 4.83px, 64px);
+    border: 2px solid var(--border-color);
+}
+
+.app-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 138px;
+}
+
+.app-content .subtitle {
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 100%;
+    font-family: var(--font-secondary);
+    margin-bottom: 24px;
+}
+
+.app-content .title {
+    font-weight: 400;
+    line-height: 113%;
+    font-family: var(--font-primary);
+    max-width: 1080px;
+}
+
+.app-btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 24px;
+}
+
+.app-btn {
+    width: 240px;
+    height: 80px;
+    display: block;
+}
+
+/* app-section css end */
+
+@media only screen and (max-width:767px) {
+
+    /* app-section css start */
+    .app-btn {
+        width: 180px;
+        height: 60px;
+    }
+
+    .app-btn {
+        width: 120px;
+        height: 40px;
+    }
+
+    /* app-section css end */
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* app-section css start */
+    .app-wrap {
+        gap: 80px;
+    }
+
+    .app-btns {
+        gap: 16px;
+    }
+
+    .app-btn {
+        width: 120px;
+        height: 40px;
+    }
+
+    /* app-section css end */
+}

@@ -110,6 +110,7 @@
     --item-bg: #FFD3C2;
     --item-bg2: #FFDE59;
     --item-bg3: #D7F23C;
+    --item-bg4: #16415F;
     --shadow1: 5px 5px 0px 0px #16415F;
 
     /* font family */
@@ -228,7 +229,6 @@ select {
     color: var(--paragraph-text-color);
     font-size: 16px;
     font-weight: 400;
-    font-family: var(--paragraph-font);
     outline: none;
     border: none;
     background-color: transparent;
@@ -995,6 +995,11 @@ html.js .reveal-group.is-visible>* {
     .btn {
         box-shadow: 2px 2px 0px 0px #022D5A;
         line-height: 17px;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 20px;
     }
 
     /* common-css end */

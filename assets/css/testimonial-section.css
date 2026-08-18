@@ -1,0 +1,124 @@
+/* testimonial-section css start */
+.testimonial-section {
+    padding-top: clamp(56px, 2.592vw + 45.59px, 80px);
+    padding-bottom: clamp(66px, 2.592vw + 55.59px, 90px);
+    padding-left: clamp(16px, 5.076vw - 4.4px, 63px);
+    padding-right: 0;
+    background: var(--item-bg2);
+    border: 2px solid var(--border-color);
+}
+
+.testimonial-section-header {
+    margin-bottom: 80px;
+}
+
+.testimonial-section-header .subtitle {
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 100%;
+    font-family: var(--font-secondary);
+    margin-bottom: 48px;
+}
+
+.testimonial-section-header .title {
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 100%;
+    font-family: var(--font-primary);
+}
+
+.swiper.testimonial-slider .swiper-slide {
+    height: auto;
+}
+
+.testimonial-card {
+    padding: 48px 43px 40px 37px;
+    background: var(--item-bg4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    height: 100%;
+    min-height: clamp(324px, 34.125vw + 186.8px, 640px);
+}
+
+.testimonial-card .rattings {
+    display: flex;
+    margin-bottom: 42px;
+}
+
+.testimonial-card .rattings svg {
+    width: 188px;
+    height: auto;
+}
+
+.testimonial-card .content {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.testimonial-card .content .text {
+    color: var(--off-white);
+    font-weight: 700;
+    font-family: var(--font-secondary);
+    line-height: 122%;
+}
+
+.testimonial-author {
+    text-transform: capitalize;
+    color: var(--off-white);
+    font-weight: 700;
+    font-family: var(--font-secondary);
+    line-height: 100%;
+}
+
+/* testimonial-section css end */
+
+@media only screen and (max-width: 767px) {
+
+    /* testimonial-section css start */
+    .testimonial-section-header {
+        margin-bottom: 64px;
+    }
+
+    .testimonial-section-header .subtitle {
+        font-size: 20px !important;
+    }
+
+    .testimonial-card {
+        padding: 42px 26px;
+    }
+
+    .testimonial-card .rattings {
+        margin-bottom: 24px;
+    }
+
+    .testimonial-card .content .text {
+        font-size: 20px !important;
+    }
+
+    .testimonial-author {
+        font-size: 20px !important;
+    }
+
+    /* testimonial-section css end */
+}
+
+@media only screen and (max-width: 575px) {
+
+    /* testimonial-section css start */
+    .testimonial-section {
+        padding-right: clamp(16px, 5.076vw - 4.4px, 63px);
+    }
+
+    .testimonial-section-header .title {
+        max-width: 270px;
+    }
+
+    .testimonial-card .rattings svg {
+        width: 94px;
+    }
+
+    /* testimonial-section css end */
+}
