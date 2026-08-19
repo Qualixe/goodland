@@ -560,7 +560,6 @@ var swiper = new Swiper(".testimonial-slider", {
 });
 // image-category-slider js end--
 
-
 // hero-parallax js start--
 (() => {
   const hero = document.querySelector(".hero-section");

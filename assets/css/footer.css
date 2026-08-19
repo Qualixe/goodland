@@ -280,6 +280,7 @@
     /* footer css start */
     .footer {
         padding: 48px 16px 16px;
+        margin: 8px 24px 0;
     }
 
     .footer-contact-list ul li {

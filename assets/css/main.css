@@ -168,34 +168,33 @@ h6 {
     color: var(--heading-text-color);
 }
 
-._h1 {
-    font-size: clamp(64px, 10.7991vw + 20.5875px, 164px);
+.h_1 {
+    font-size: clamp(64px, calc(10.7991vw + 20.5875px), 164px);
 }
 
-._h2 {
-    font-size: clamp(56px, 5.6156vw + 33.4255px, 108px);
+.h_2 {
+    font-size: clamp(56px, calc(5.6156vw + 33.4255px), 108px);
 }
 
-._h3 {
-    font-size: clamp(32px, 3.4557vw + 18.108px, 64px);
+.h_3 {
+    font-size: clamp(32px, calc(3.4557vw + 18.108px), 64px);
 }
 
-._h4 {
-    font-size: clamp(20px, 2.3758vw + 10.4492px, 42px);
+.h_4 {
+    font-size: clamp(20px, calc(2.3758vw + 10.4492px), 42px);
 }
 
-._h5 {
-    font-size: clamp(14px, 1.5119vw + 7.9222px, 28px);
+.h_5 {
+    font-size: clamp(14px, calc(1.5119vw + 7.9222px), 28px);
 }
 
-._h6 {
-    font-size: clamp(14px, 0.432vw + 12.2635px, 18px);
+.h_6 {
+    font-size: clamp(14px, calc(0.432vw + 12.2635px), 18px);
 }
 
 ._p {
-    font-size: clamp(14px, 0.432vw + 12.2635px, 18px);
+    font-size: clamp(14px, calc(0.432vw + 12.2635px), 18px);
 }
-
 
 p {
     font-size: 16px;
@@ -269,10 +268,10 @@ button {
 }
 
 .btn {
-    padding: clamp(8px, 1.002vw + 1.89px, 19px) clamp(16px, 3.009vw + 2.04px, 48px);
+    padding: clamp(8px, calc(1.1879vw + 3.2257px), 19px) clamp(16px, calc(3.4557vw + 2.108px), 48px);
+    font-size: clamp(14px, calc(1.5119vw + 7.9222px), 28px);
     color: var(--btn-color);
     background: var(--btn-bg);
-    font-size: clamp(14px, 1.5119vw + 7.9222px, 28px);
     font-weight: 700;
     line-height: 1;
     text-transform: uppercase;
