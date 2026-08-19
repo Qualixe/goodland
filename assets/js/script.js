@@ -29,6 +29,150 @@
 })();
 // scroll-reveal js end--
 
+// hero-char-reveal js start--
+(() => {
+  const el = document.querySelector(".hero-char-reveal");
+  if (!el) return;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (reduceMotion) return;
+
+  // Splits into one span per non-space character, grouped per word under a
+  // nowrap wrapper so the browser still only wraps lines between words.
+  // Only runs if the element is plain text + <br> — anything more complex
+  // is left untouched.
+  const nodes = [...el.childNodes];
+  const isSimple = nodes.every(
+    (n) =>
+      n.nodeType === Node.TEXT_NODE ||
+      (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
+  );
+  if (!isSimple) return;
+
+  const frag = document.createDocumentFragment();
+  const chars = [];
+
+  nodes.forEach((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+      frag.appendChild(document.createElement("br"));
+      return;
+    }
+
+    node.textContent.split(/(\s+)/).forEach((chunk) => {
+      if (!chunk) return;
+      if (!chunk.trim()) {
+        frag.appendChild(document.createTextNode(chunk));
+        return;
+      }
+
+      const wordGroup = document.createElement("span");
+      wordGroup.className = "word-group";
+
+      Array.from(chunk).forEach((ch) => {
+        const span = document.createElement("span");
+        span.className = "hchar";
+        span.textContent = ch;
+        wordGroup.appendChild(span);
+        chars.push(span);
+      });
+
+      frag.appendChild(wordGroup);
+    });
+  });
+
+  if (!chars.length) return;
+
+  el.innerHTML = "";
+  el.appendChild(frag);
+
+  // Per-character stagger, scaled so the whole cascade stays around ~600ms
+  // regardless of heading length (matching the reference site's dynamically
+  // computed constant), clamped to a sensible pace at very short/long texts.
+  const STAGGER_BUDGET_MS = 600;
+  const step = chars.length > 1
+    ? Math.min(45, Math.max(15, STAGGER_BUDGET_MS / (chars.length - 1)))
+    : 0;
+  chars.forEach((char, i) => {
+    char.style.setProperty("--hd", `${Math.round(i * step)}ms`);
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        el.classList.add("is-visible");
+        observer.unobserve(el);
+      });
+    },
+    { threshold: 0.2 },
+  );
+
+  observer.observe(el);
+})();
+// hero-char-reveal js end--
+
+// counter-up js start--
+(() => {
+  const section = document.querySelector(".counter-section");
+  const els = document.querySelectorAll(".counter-number");
+  if (!section || !els.length) return;
+
+  // Only counts up values that are purely numeric (with optional thousands
+  // commas and a trailing "+"), e.g. "2", "10", "11,000+". Anything else —
+  // "Pro", "6A-12A" — isn't a real number, so it's left completely alone.
+  const parsed = [...els]
+    .map((el) => {
+      const match = el.textContent.trim().match(/^([\d,]+)(\+?)$/);
+      if (!match) return null;
+      return {
+        el,
+        target: parseInt(match[1].replace(/,/g, ""), 10),
+        suffix: match[2],
+      };
+    })
+    .filter(Boolean);
+
+  if (!parsed.length) return;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (reduceMotion) return; // leave the static target values already in the DOM
+
+  const animateCount = ({ el, target, suffix }, duration = 1600) => {
+    const start = performance.now();
+
+    const step = (now) => {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+      const value = Math.round(target * eased);
+      el.textContent = value.toLocaleString("en-US") + suffix;
+
+      if (t < 1) requestAnimationFrame(step);
+      else el.textContent = target.toLocaleString("en-US") + suffix;
+    };
+
+    el.textContent = "0" + suffix;
+    requestAnimationFrame(step);
+  };
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        parsed.forEach((item) => animateCount(item));
+        observer.unobserve(section);
+      });
+    },
+    { threshold: 0.3, rootMargin: "0px 0px -10% 0px" },
+  );
+
+  observer.observe(section);
+})();
+// counter-up js end--
+
 // smooth-scroll js start--
 (() => {
   const reduceMotion = window.matchMedia(

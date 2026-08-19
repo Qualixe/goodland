@@ -54,6 +54,52 @@
 
 /* hero-section css end */
 
+/* hero-char-reveal css start */
+/* Matches the reference Shopify build's hero animation exactly: each letter
+   starts translated 90% down (--xo-strength 3 * 30%) and transparent, then
+   springs up into place with a bouncy cubic-bezier (note the >1 value —
+   that's the overshoot) once script.js adds .is-visible, staggered per
+   character via --hd. Word-grouped in a nowrap wrapper so line-wrapping
+   still only breaks between words, not mid-word. */
+.hero-char-reveal .word-group {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.hero-char-reveal .hchar {
+    display: inline-block;
+    opacity: 0;
+    transform: translate3d(0, 90%, 0);
+}
+
+.hero-char-reveal.is-visible .hchar {
+    animation: heroCharFadeUp 333ms cubic-bezier(.27, .79, .45, 1.24) both;
+    animation-delay: var(--hd, 0ms);
+}
+
+@keyframes heroCharFadeUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 90%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .hero-char-reveal .hchar {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+}
+
+/* hero-char-reveal css end */
+
 @media only screen and (max-width: 1328px) {
 
     /* hero-section css start */
