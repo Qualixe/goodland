@@ -29,10 +29,10 @@
 })();
 // scroll-reveal js end--
 
-// hero-char-reveal js start--
+// char-reveal js start--
 (() => {
-  const el = document.querySelector(".hero-char-reveal");
-  if (!el) return;
+  const targets = document.querySelectorAll(".char-reveal");
+  if (!targets.length) return;
 
   const reduceMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -41,77 +41,238 @@
 
   // Splits into one span per non-space character, grouped per word under a
   // nowrap wrapper so the browser still only wraps lines between words.
-  // Only runs if the element is plain text + <br> — anything more complex
-  // is left untouched.
-  const nodes = [...el.childNodes];
-  const isSimple = nodes.every(
-    (n) =>
-      n.nodeType === Node.TEXT_NODE ||
-      (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
-  );
-  if (!isSimple) return;
+  // Only runs on elements whose only children are text nodes and <br> —
+  // anything more complex is left untouched.
+  const splitIntoChars = (el) => {
+    const nodes = [...el.childNodes];
+    const isSimple = nodes.every(
+      (n) =>
+        n.nodeType === Node.TEXT_NODE ||
+        (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
+    );
+    if (!isSimple) return [];
 
-  const frag = document.createDocumentFragment();
-  const chars = [];
+    const frag = document.createDocumentFragment();
+    const chars = [];
 
-  nodes.forEach((node) => {
-    if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
-      frag.appendChild(document.createElement("br"));
-      return;
-    }
-
-    node.textContent.split(/(\s+)/).forEach((chunk) => {
-      if (!chunk) return;
-      if (!chunk.trim()) {
-        frag.appendChild(document.createTextNode(chunk));
+    nodes.forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
+        frag.appendChild(document.createElement("br"));
         return;
       }
 
-      const wordGroup = document.createElement("span");
-      wordGroup.className = "word-group";
+      node.textContent.split(/(\s+)/).forEach((chunk) => {
+        if (!chunk) return;
+        if (!chunk.trim()) {
+          frag.appendChild(document.createTextNode(chunk));
+          return;
+        }
 
-      Array.from(chunk).forEach((ch) => {
-        const span = document.createElement("span");
-        span.className = "hchar";
-        span.textContent = ch;
-        wordGroup.appendChild(span);
-        chars.push(span);
+        const wordGroup = document.createElement("span");
+        wordGroup.className = "word-group";
+
+        Array.from(chunk).forEach((ch) => {
+          const span = document.createElement("span");
+          span.className = "hchar";
+          span.textContent = ch;
+          wordGroup.appendChild(span);
+          chars.push(span);
+        });
+
+        frag.appendChild(wordGroup);
       });
-
-      frag.appendChild(wordGroup);
     });
-  });
 
-  if (!chars.length) return;
+    el.innerHTML = "";
+    el.appendChild(frag);
+    return chars;
+  };
 
-  el.innerHTML = "";
-  el.appendChild(frag);
-
-  // Per-character stagger, scaled so the whole cascade stays around ~600ms
-  // regardless of heading length (matching the reference site's dynamically
-  // computed constant), clamped to a sensible pace at very short/long texts.
+  // Per-character stagger, scaled so each heading's whole cascade stays
+  // around ~600ms regardless of its length (matching the reference site's
+  // dynamically computed constant), clamped to a sensible pace at very
+  // short/long texts.
   const STAGGER_BUDGET_MS = 600;
-  const step = chars.length > 1
-    ? Math.min(45, Math.max(15, STAGGER_BUDGET_MS / (chars.length - 1)))
-    : 0;
-  chars.forEach((char, i) => {
-    char.style.setProperty("--hd", `${Math.round(i * step)}ms`);
+
+  const items = [...targets]
+    .map((el) => ({ el, chars: splitIntoChars(el) }))
+    .filter((item) => item.chars.length);
+
+  if (!items.length) return;
+
+  items.forEach(({ chars }) => {
+    const step = chars.length > 1
+      ? Math.min(45, Math.max(15, STAGGER_BUDGET_MS / (chars.length - 1)))
+      : 0;
+    chars.forEach((char, i) => {
+      char.style.setProperty("--hd", `${Math.round(i * step)}ms`);
+    });
   });
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        el.classList.add("is-visible");
-        observer.unobserve(el);
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.2 },
+    { threshold: 0.2, rootMargin: "0px 0px -10% 0px" },
   );
 
-  observer.observe(el);
+  items.forEach(({ el }) => observer.observe(el));
 })();
-// hero-char-reveal js end--
+// char-reveal js end--
+
+// text-reveal js start--
+(() => {
+  const targets = document.querySelectorAll(".text-reveal");
+  if (!targets.length) return;
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  if (reduceMotion) return;
+
+  // Captures the element's original simple content (text + <br>) once, so
+  // it can be rebuilt from scratch on resize. Only elements whose only
+  // children are text nodes and <br> are handled — anything more complex
+  // is left untouched.
+  const captureOriginal = (el) => {
+    const nodes = [...el.childNodes];
+    const isSimple = nodes.every(
+      (n) =>
+        n.nodeType === Node.TEXT_NODE ||
+        (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
+    );
+    if (!isSimple) return null;
+    return nodes.map((n) =>
+      n.nodeType === Node.ELEMENT_NODE
+        ? { type: "br" }
+        : { type: "text", value: n.textContent },
+    );
+  };
+
+  // Splitting by *line* means measuring where the browser actually wraps —
+  // words don't tell you that on their own. Renders the text as word spans
+  // first (each carrying its own trailing space so spacing survives being
+  // moved), reads each word's offsetTop to detect line boundaries (a real
+  // wrap and an original <br> both show up as a jump), then regroups the
+  // words into one block-level span per line.
+  const splitIntoLines = (el, original) => {
+    const tempFrag = document.createDocumentFragment();
+    const words = [];
+
+    original.forEach((part) => {
+      if (part.type === "br") {
+        tempFrag.appendChild(document.createElement("br"));
+        return;
+      }
+
+      const parts = part.value.split(/(\s+)/).filter((p) => p !== "");
+      parts.forEach((chunk, i) => {
+        if (!chunk.trim()) return;
+        const span = document.createElement("span");
+        const nextIsSpace = parts[i + 1] && !parts[i + 1].trim();
+        span.textContent = chunk + (nextIsSpace ? " " : "");
+        tempFrag.appendChild(span);
+        words.push(span);
+      });
+    });
+
+    if (!words.length) return [];
+
+    el.innerHTML = "";
+    el.appendChild(tempFrag);
+
+    const lineGroups = [];
+    let lastTop = null;
+    words.forEach((word) => {
+      const top = word.offsetTop;
+      if (lastTop === null || Math.abs(top - lastTop) > 2) {
+        lineGroups.push([]);
+        lastTop = top;
+      }
+      lineGroups[lineGroups.length - 1].push(word);
+    });
+
+    const finalFrag = document.createDocumentFragment();
+    const lines = lineGroups.map((group) => {
+      const lineSpan = document.createElement("span");
+      lineSpan.className = "trline";
+      group.forEach((word) => lineSpan.appendChild(word));
+      finalFrag.appendChild(lineSpan);
+      return lineSpan;
+    });
+
+    el.innerHTML = "";
+    el.appendChild(finalFrag);
+    return lines;
+  };
+
+  const clamp01 = (v) => Math.max(0, Math.min(1, v));
+
+  const items = [...targets]
+    .map((el) => {
+      const original = captureOriginal(el);
+      if (!original) return null;
+      return { el, original, lines: splitIntoLines(el, original) };
+    })
+    .filter((item) => item && item.lines.length);
+
+  if (!items.length) return;
+
+  // Progress is 0 while the heading's top sits at 85% of the viewport
+  // height, 1 once it reaches 35% — recalculated continuously from actual
+  // scroll position, so scrolling back up drains the wipe back out. Lines
+  // are sequenced within that same progress (85% of the window spent
+  // staggering line starts) so one line finishes filling before the next
+  // starts, rather than every line filling together.
+  const updateItem = ({ el, lines }) => {
+    const rect = el.getBoundingClientRect();
+    const startY = window.innerHeight * 0.85;
+    const endY = window.innerHeight * 0.35;
+    const progress = clamp01((startY - rect.top) / (startY - endY));
+
+    const n = lines.length;
+    const spread = 0.85;
+    lines.forEach((line, i) => {
+      const lineStart = (i / n) * spread;
+      const lineDuration = 1 - spread + spread / n;
+      const local = clamp01((progress - lineStart) / lineDuration);
+      line.style.setProperty("--wp", `${(local * 100).toFixed(1)}%`);
+    });
+  };
+
+  const updateAll = () => items.forEach(updateItem);
+
+  let ticking = false;
+  const queue = () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      ticking = false;
+      updateAll();
+    });
+  };
+
+  // Line wrapping depends on viewport width, so re-measure on resize.
+  let resizeTimer = null;
+  const handleResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      items.forEach((item) => {
+        item.lines = splitIntoLines(item.el, item.original);
+      });
+      updateAll();
+    }, 150);
+  };
+
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", handleResize);
+  updateAll();
+})();
+// text-reveal js end--
 
 // counter-up js start--
 (() => {
@@ -433,109 +594,3 @@ var swiper = new Swiper(".testimonial-slider", {
 })();
 // hero-parallax js end--
 
-// text-reveal js start--
-(() => {
-  const targets = document.querySelectorAll(".text-reveal");
-  if (!targets.length) return;
-
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduceMotion) return;
-
-  // Wraps each non-space character in its own span (the gradient-clip color
-  // wipe lives on it directly — see main.css), with each word's characters
-  // grouped under a nowrap wrapper so the browser still only wraps lines
-  // between words, not in the middle of one. Whitespace stays as plain text.
-  // Only touches elements whose only children are text nodes and <br> —
-  // anything more complex is left untouched.
-  const splitIntoChars = (el) => {
-    const nodes = [...el.childNodes];
-    const isSimple = nodes.every(
-      (n) =>
-        n.nodeType === Node.TEXT_NODE ||
-        (n.nodeType === Node.ELEMENT_NODE && n.tagName === "BR"),
-    );
-    if (!isSimple) return [];
-
-    const frag = document.createDocumentFragment();
-    const chars = [];
-
-    nodes.forEach((node) => {
-      if (node.nodeType === Node.ELEMENT_NODE && node.tagName === "BR") {
-        frag.appendChild(document.createElement("br"));
-        return;
-      }
-
-      node.textContent.split(/(\s+)/).forEach((chunk) => {
-        if (!chunk) return;
-        if (!chunk.trim()) {
-          frag.appendChild(document.createTextNode(chunk));
-          return;
-        }
-
-        const wordGroup = document.createElement("span");
-        wordGroup.className = "word-group";
-
-        Array.from(chunk).forEach((ch) => {
-          const span = document.createElement("span");
-          span.className = "char";
-          span.textContent = ch;
-          wordGroup.appendChild(span);
-          chars.push(span);
-        });
-
-        frag.appendChild(wordGroup);
-      });
-    });
-
-    el.innerHTML = "";
-    el.appendChild(frag);
-    return chars;
-  };
-
-  const clamp01 = (v) => Math.max(0, Math.min(1, v));
-
-  const items = [...targets]
-    .map((el) => ({ el, chars: splitIntoChars(el) }))
-    .filter((item) => item.chars.length);
-
-  if (!items.length) return;
-
-  // Each heading's fill progress is 0 while its top sits at 85% of the
-  // viewport height, 1 once it reaches 35% — recalculated every scroll
-  // frame from actual scroll position, not a fixed timer, so the reveal
-  // stays tied to scroll: keep scrolling and more letters light up, scroll
-  // back up and they drain back out. Letters are staggered within that
-  // window so they still cascade rather than lighting up together.
-  const updateItem = ({ el, chars }) => {
-    const rect = el.getBoundingClientRect();
-    const startY = window.innerHeight * 0.85;
-    const endY = window.innerHeight * 0.35;
-    const progress = clamp01((startY - rect.top) / (startY - endY));
-
-    const n = chars.length;
-    const spread = 0.8; // portion of the window spent staggering letter starts
-    chars.forEach((char, i) => {
-      const charStart = (i / n) * spread;
-      const charDuration = 1 - spread + spread / n;
-      const local = clamp01((progress - charStart) / charDuration);
-      char.style.setProperty("--wp", `${(100 - local * 100).toFixed(1)}%`);
-    });
-  };
-
-  const updateAll = () => items.forEach(updateItem);
-
-  let ticking = false;
-  const queue = () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      ticking = false;
-      updateAll();
-    });
-  };
-
-  window.addEventListener("scroll", queue, { passive: true });
-  window.addEventListener("resize", queue);
-  updateAll();
-})();
-// text-reveal js end--

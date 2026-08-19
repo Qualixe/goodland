@@ -25,7 +25,7 @@
     font-weight: 400;
 }
 
-.service-title.text-reveal .char {
+.service-title.text-reveal {
     --tr-color: var(--off-white);
 }
 

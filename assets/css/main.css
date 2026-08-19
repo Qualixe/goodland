@@ -168,31 +168,31 @@ h6 {
     color: var(--heading-text-color);
 }
 
-.h1 {
+._h1 {
     font-size: clamp(64px, 10.7991vw + 20.5875px, 164px);
 }
 
-.h2 {
+._h2 {
     font-size: clamp(56px, 5.6156vw + 33.4255px, 108px);
 }
 
-.h3 {
+._h3 {
     font-size: clamp(32px, 3.4557vw + 18.108px, 64px);
 }
 
-.h4 {
+._h4 {
     font-size: clamp(20px, 2.3758vw + 10.4492px, 42px);
 }
 
-.h5 {
+._h5 {
     font-size: clamp(14px, 1.5119vw + 7.9222px, 28px);
 }
 
-.h6 {
+._h6 {
     font-size: clamp(14px, 0.432vw + 12.2635px, 18px);
 }
 
-.p {
+._p {
     font-size: clamp(14px, 0.432vw + 12.2635px, 18px);
 }
 
@@ -355,38 +355,85 @@ html.js .reveal-group.is-visible>* {
 
 /* scroll-reveal css end */
 
-/* text-reveal css start */
-/* Scroll-linked, letter-by-letter text color reveal. Each character is its
-   own span with a hard-stop gradient twice its own width; sliding that
-   gradient's background-position-x from 100% (dim half showing) to 0%
-   (full-color half showing) makes the letter "wipe" into color. script.js
-   writes --wp per character every scroll frame — driven continuously by how
-   far the heading has scrolled through the viewport, staggered per letter —
-   so it stays tied to scroll position: scroll further and more letters
-   light up, scroll back up and they drain back out. If JS never runs, --wp
-   falls back to 0% (revealed) so the text just reads normally. */
-.text-reveal .word-group {
+/* char-reveal css start */
+/* Matches the reference Shopify build's animation exactly: each letter
+   starts translated 90% down (--xo-strength 3 * 30%) and transparent, then
+   springs up into place with a bouncy cubic-bezier (note the >1 value —
+   that's the overshoot) once script.js adds .is-visible, staggered per
+   character via --hd. Word-grouped in a nowrap wrapper so line-wrapping
+   still only breaks between words, not mid-word. Color comes from whatever
+   the element already inherits (off-white on the hero photo, navy
+   everywhere else) — this only ever touches opacity/transform. */
+.char-reveal .word-group {
     display: inline-block;
     white-space: nowrap;
 }
 
-.text-reveal .char {
+.char-reveal .hchar {
     display: inline-block;
-    --tr-color: var(--heading-text-color);
-    --tr-dim: rgba(22, 65, 95, .22);
-    background-image: linear-gradient(to right, var(--tr-color) 50%, var(--tr-dim) 50%);
-    background-size: 200% 100%;
-    background-position-x: var(--wp, 0%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
-    transition: background-position-x .1s linear;
+    opacity: 0;
+    transform: translate3d(0, 90%, 0);
 }
 
-.hero-content .text-reveal .char {
-    --tr-color: var(--off-white);
-    --tr-dim: rgba(238, 236, 222, .32);
+.char-reveal.is-visible .hchar {
+    animation: charFadeUp 333ms cubic-bezier(.27, .79, .45, 1.24) both;
+    animation-delay: var(--hd, 0ms);
+}
+
+@keyframes charFadeUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 90%, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .char-reveal .hchar {
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+}
+
+/* char-reveal css end */
+
+/* text-reveal css start */
+/* Same mechanism as the reference Shopify build's xo-text__reveal (a solid-
+   color background clipped to the text, its width scroll-linked 0%-100% so
+   it reads as color "filling in"), but split per rendered *line* — script.js
+   measures where the browser actually wraps and gives each line its own
+   --wp, sequenced within the same scroll progress so one line finishes
+   filling before the next starts, instead of every line filling together.
+   --tr-color is set on the outer .text-reveal and inherits down into each
+   .trline. Reversible — scroll back up and the wipe retreats. */
+.text-reveal {
+    --tr-color: var(--heading-text-color);
+}
+
+.text-reveal .trline {
+    display: block;
+    color: color-mix(in srgb, var(--tr-color) 50%, transparent);
+    background-image: linear-gradient(90deg, var(--tr-color), var(--tr-color));
+    background-repeat: no-repeat;
+    background-size: var(--wp, 100%) 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: background-size .1s linear;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .text-reveal .trline {
+        background-image: none;
+        color: var(--tr-color);
+        transition: none;
+    }
 }
 
 /* text-reveal css end */
